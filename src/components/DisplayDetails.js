@@ -1,39 +1,40 @@
 import React, { useEffect, useState } from "react";
 
-function DisplayDetails({ setBalance, contract }) {
+function DisplayDetails({ contract }) {
   const [goldDetails, setGoldDetails] = useState({});
+
   const [users, setUsers] = useState([]);
-
   const initEvents = () => {
-    if (contract == null) return;
-    contract.on("Transfer", (from, to, amount) => {
+    contract.on("BalanceUpdate", (address, amount) => {
+      // console.log(`address ${address} amt ${amount}`);
+      address = address.toString();
+      amount /= 100;
       setGoldDetails((prevState) => {
-        if (typeof goldDetails[to] === "undefined") {
-          prevState[to] = amount / 100;
-          setUsers((prevState) => [...prevState, to]);
-        } else {
-          prevState[to] += amount / 100;
-        }
-
-        if (typeof goldDetails[from] === "undefined") {
-          prevState[from] = -amount / 100;
-        } else {
-          prevState[from] -= amount / 100;
-        }
+        prevState[address] = amount;
         return prevState;
       });
     });
   };
   useEffect(() => {
+    const interval = setInterval(() => {
+      setUsers(Object.keys(goldDetails));
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (contract == null) return;
     initEvents();
   }, [contract]);
 
   return (
     <div>
       <h3>Gold Holding Details</h3>
-      {users.map((address) => {
+      {users.map((address, index) => {
         return (
-          <div key={address}>
+          <div key={index}>
             {address} : {goldDetails[address]}
           </div>
         );

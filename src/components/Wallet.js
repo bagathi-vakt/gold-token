@@ -4,7 +4,7 @@ import { useState } from "react";
 import gold_token_abi from "../contracts/gold_token_abi.json";
 import DisplayDetails from "./DisplayDetails";
 import Interactions from "./Interactions";
-const contractAddress = "0x6B5718C050c6eEb7d102F576195BD64CcEc2F697";
+const contractAddress = "0x58B8e5114b781C1A12a05507101bCc718b50f3bc";
 let provider, signer;
 function Wallet() {
   const [tokenName, setTokenName] = useState("Token");
@@ -26,17 +26,19 @@ function Wallet() {
     if (contract) setTokenName(await contract.name());
   };
 
+  const convertAmountToNumber = () => {};
   const updateBalance = async () => {
-    if (defaultAccount) {
-      const balanceBigN = await contract.balanceOf(defaultAccount);
-      console.log(balanceBigN);
-      let balanceNumber = balanceBigN.toNumber();
-      console.log("balanceNumber", balanceNumber);
+    // console.log("in update balance", defaultAccount);
+    if (defaultAccount == null) return;
 
-      let decimals = await contract.decimals();
-      const tokenBalance = balanceNumber / Math.pow(10, decimals);
-      setBalance(tokenBalance);
-    }
+    // console.log("inside if");
+    const balanceBigN = await contract.balanceOf(defaultAccount);
+    // console.log(balanceBigN);
+    let balanceNumber = balanceBigN.toNumber();
+
+    let decimals = await contract.decimals();
+    const tokenBalance = balanceNumber / Math.pow(10, decimals);
+    setBalance(tokenBalance);
   };
 
   const accountChangedHandler = (newAddress) => {
@@ -81,8 +83,10 @@ function Wallet() {
         </h3>
       </div>
       --------------------------------------------------------
-      <Interactions contract={contract} />
-      <DisplayDetails contract={contract} setBalance={setBalance} />
+      <Interactions contract={contract} updateBalance={updateBalance} />
+      <br />
+      --------------------------------------------------------
+      <DisplayDetails contract={contract} />
     </div>
   );
 }

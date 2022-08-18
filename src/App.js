@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Wallet from "./components/Wallet";
+import { useEffect } from "react";
 
 function App() {
   return (
