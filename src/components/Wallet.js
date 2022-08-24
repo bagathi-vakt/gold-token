@@ -6,7 +6,7 @@ import DisplayDetails from "./DisplayDetails";
 import Interactions from "./Interactions";
 import Mint from "./Mint";
 import ShowMint from "./ShowMint";
-const contractAddress = "0xeCEB7C0aae3cFa4c72EDFC2CD252Aa6FE398d930";
+const contractAddress = "0xda00Cd522c7265cfAC0B7104dA91C209C6963a4a";
 let signer;
 function Wallet() {
   const [tokenName, setTokenName] = useState("Token");

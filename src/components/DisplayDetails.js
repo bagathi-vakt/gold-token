@@ -52,11 +52,9 @@ function DisplayDetails({ contract, users, mintDetails, defaultAccount }) {
       {users.map((address, index) => {
         return (
           <div key={index}>
-            {address} : {goldDetails[address]} ,{" "}
-            {mintDetails[address.toString().toLowerCase()]
-              ? "mint"
-              : "cantMint"}
-            {address.toString().toLowerCase() === defaultAccount ? (
+            {address} : {goldDetails[address]} ,{"    "}
+            {mintDetails[address] ? "mint" : "cantMint"}
+            {address === defaultAccount ? (
               <></>
             ) : mintDetails[defaultAccount] ? (
               <button onClick={() => toggleMint(address)}>toggle</button>
