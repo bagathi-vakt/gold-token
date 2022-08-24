@@ -4,7 +4,7 @@ import goldabi from "../contracts/gold_token_abi.json";
 import goldbytecode from "../contracts/gold_bytecode.json";
 var factory;
 function TokenFactory() {
-  const [address, setAddress] = useState([]);
+  const [tokens, setTokens] = useState([]);
   useEffect(() => {
     const fun = async () => {
       const _provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -15,13 +15,22 @@ function TokenFactory() {
     fun();
   }, []);
   const handleSubmit = async (e) => {
-    console.log("e is ", e);
+    // console.log("e is ", e);
     e.preventDefault();
+    const name = e.target.name.value;
+    const symbol = e.target.symbol.value;
+
     const contract = await factory.deploy(
       e.target.name.value,
       e.target.symbol.value
     );
-    setAddress([...address, contract.address]);
+    const address = contract.address;
+    const token = {
+      address,
+      name,
+      symbol,
+    };
+    setTokens([...tokens, token]);
   };
 
   return (
@@ -34,8 +43,10 @@ function TokenFactory() {
           <button type="submit">create token</button>
         </form>
         <ul>
-          {address.map((add) => (
-            <li key={add}>{add}</li>
+          {tokens.map((token) => (
+            <li key={token.address}>
+              {token.symbol}-{token.name}-{token.address}
+            </li>
           ))}
         </ul>
       </div>
